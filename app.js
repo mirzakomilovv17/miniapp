@@ -15,20 +15,25 @@ async function sendData() {
 
     const body = {
         user_id: tg.initDataUnsafe?.user?.id,
-        name,
-        phone
+        name: name,
+        phone: phone
     };
 
-    const response = await fetch(backendURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-    });
+    try {
+        const response = await fetch(backendURL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
 
-    if (response.ok) {
-        status.textContent = "Muvaffaqiyatli yuborildi!";
-        tg.close();
-    } else {
-        status.textContent = "Xatolik!";
+        if (response.ok) {
+            status.textContent = "Muvaffaqiyatli yuborildi!";
+            tg.close();
+        } else {
+            status.textContent = "Xatolik (Backend javob qaytarmadi)";
+        }
+    } catch (err) {
+        status.textContent = "Serverga ulanishda xatolik!";
+        console.error(err);
     }
 }
