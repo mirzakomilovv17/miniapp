@@ -1,4 +1,5 @@
 const tg = window.Telegram.WebApp;
+tg.ready();
 tg.expand();
 
 async function sendData() {
@@ -11,12 +12,17 @@ async function sendData() {
         return;
     }
 
+    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+        status.textContent = "Mini App Telegram ichida ochilishi kerak!";
+        return;
+    }
+
     const backendURL = "https://miniapp-backend-ejgl.onrender.com/save";
 
     const body = {
-        user_id: tg.initDataUnsafe?.user?.id,
-        name: name,
-        phone: phone
+        user_id: tg.initDataUnsafe.user.id,
+        name,
+        phone
     };
 
     try {
@@ -26,14 +32,14 @@ async function sendData() {
             body: JSON.stringify(body)
         });
 
-        if (response.ok) {
-            status.textContent = "Muvaffaqiyatli yuborildi!";
-            tg.close();
-        } else {
-            status.textContent = "Xatolik (Backend javob qaytarmadi)";
-        }
-    } catch (err) {
-        status.textContent = "Serverga ulanishda xatolik!";
-        console.error(err);
+        const result = await response.json();
+        console.log(result);
+
+        status.textContent = "Muvaffaqiyatli yuborildi!";
+        tg.close();
+
+    } catch (error) {
+        console.error(error);
+        status.textContent = "Xatolik!";
     }
 }
