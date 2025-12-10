@@ -17,7 +17,7 @@ async function sendData() {
         return;
     }
 
-    const backendURL = "https://miniapp-backend-ejgl.onrender.com/save";
+    const backendURL = "https://miniapp-backend-ejgl.onrender.com";
 
     const body = {
         user_id: tg.initDataUnsafe.user.id,
@@ -43,3 +43,4 @@ async function sendData() {
         status.textContent = "Xatolik!";
     }
 }
+
