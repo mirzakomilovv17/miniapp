@@ -5,29 +5,36 @@
 </head>
 <body>
 <div class="container">
-    <h2>Sign Up</h2>
-    <input id="name" placeholder="Ismingiz"><br>
-    <input id="phone" placeholder="Telefon (+998...)"><br>
-    <input id="password" type="password" placeholder="Parol"><br>
-    <button onclick="signup()">Ro'yxatdan o'tish</button>
+    <h2>Login</h2>
+
+    <input id="phone" placeholder="Telefon (+998...)">
+    <input id="password" type="password" placeholder="Parol">
+
+    <button onclick="login()">Kirish</button>
     <p id="status"></p>
 </div>
 
 <script>
-async function signup() {
-    const name = document.getElementById("name").value.trim();
+async function login() {
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value.trim();
-    const backend = "https://miniapp-backend-ejgl.onrender.com/signup";
 
-    const res = await fetch(backend,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ name, phone, password })
+    const res = await fetch("https://YOUR_RENDER_URL/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, password })
     });
+
     const data = await res.json();
-    document.getElementById("status").innerText = data.error || data.message;
-    if (data.success) window.location.href="profile.html";
+
+    if (data.error) {
+        document.getElementById("status").innerText = data.error;
+        return;
+    }
+
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    window.location.href = "profile.html";
 }
 </script>
 </body>
