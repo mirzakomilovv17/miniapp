@@ -1,24 +1,29 @@
-<input id="code">
-<button id="verify">Keyingi</button>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Verify</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Kodni kiriting</h1>
+    <input id="code" placeholder="6 xonali kod" maxlength="6" />
+    <button id="verifyBtn">Keyingi</button>
+    <p id="error"></p>
+  </div>
 
 <script>
-const chat_id = new URLSearchParams(location.search).get("chat_id");
-
-document.getElementById("verify").onclick = async () => {
-    let code = document.getElementById("code").value;
-
-    let send = await fetch("https://miniapp.onrender.com/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id, code })
-    });
-
-    let res = await send.json();
-
-    if (res.success) {
-        window.location.href = "create-name.html?chat_id=" + chat_id;
-    } else {
-        alert("Xato kod");
-    }
-};
+document.getElementById("verifyBtn").addEventListener("click", async () => {
+  const code = document.getElementById("code").value.trim();
+  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+  if (!code || code.length !== 6) { document.getElementById("error").innerText = "6 xonali kod kiriting"; return; }
+  const r = await post("/verify-code", { user_id: String(userId), code });
+  if (r.success) location.href = "set-profile.html";
+  else document.getElementById("error").innerText = r.error || "Kod xato";
+});
 </script>
+</body>
+</html>
