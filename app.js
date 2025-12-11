@@ -1,53 +1,75 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-document.getElementById("sendBtn").addEventListener("click", sendData);
+const forms = document.getElementById("forms");
+const status = document.getElementById("status");
 
-async function sendData() {
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const status = document.getElementById("status");
+// SIGNUP BOSILGANDA
+document.getElementById("signupBtn").addEventListener("click", () => {
+    forms.innerHTML = `
+        <h3>Ro'yxatdan o'tish</h3>
+        <input id="name" placeholder="Ism"><br>
+        <input id="phone" placeholder="Telefon"><br>
+        <input id="password" type="password" placeholder="Parol"><br>
+        <button id="sendSignup" class="btn">Yuborish</button>
+    `;
 
-    if (!name || !phone) {
-        status.style.color = "red";
-        status.textContent = "Ma'lumot to‘liq emas!";
-        return;
-    }
+    document.getElementById("sendSignup").onclick = sendSignup;
+});
 
-    const backendURL = "https://miniapp-backend-ejgl.onrender.com/save";
+// LOGIN BOSILGANDA
+document.getElementById("loginBtn").addEventListener("click", () => {
+    forms.innerHTML = `
+        <h3>Kirish</h3>
+        <input id="phoneLogin" placeholder="Telefon"><br>
+        <input id="passwordLogin" type="password" placeholder="Parol"><br>
+        <button id="sendLogin" class="btn">Kirish</button>
+    `;
 
-    const payload = {
-        user_id: tg.initDataUnsafe?.user?.id,
-        name,
-        phone
+    document.getElementById("sendLogin").onclick = sendLogin;
+});
+
+
+// -------- SIGNUP FUNKSIYA --------
+async function sendSignup() {
+    const backendURL = "https://miniapp-backend-ejgl.onrender.com/signup";
+
+    const data = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        password: document.getElementById("password").value.trim(),
+        user_id: tg.initDataUnsafe?.user?.id
     };
 
-    console.log("Yuborilayotgan ma'lumot:", payload);
+    let res = await fetch(backendURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
 
-    try {
-        const response = await fetch(backendURL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-        console.log("Backenddan javob:", data);
-
-        if (response.ok) {
-            status.style.color = "green";
-            status.textContent = "Muvaffaqiyatli yuborildi!";
-            tg.close(); // mini appni yopadi
-        } else {
-            status.style.color = "red";
-            status.textContent = "Xatolik yuz berdi!";
-        }
-
-    } catch (error) {
-        console.error("Fetch error:", error);
-        status.style.color = "red";
-        status.textContent = "Serverga ulanishda xato!";
-    }
+    let result = await res.json();
+    status.textContent = result.message;
 }
 
+// -------- LOGIN FUNKSIYA --------
+async function sendLogin() {
+    const backendURL = "https://miniapp-backend-ejgl.onrender.com/login";
 
+    const data = {
+        phone: document.getElementById("phoneLogin").value.trim(),
+        password: document.getElementById("passwordLogin").value.trim()
+    };
+
+    let res = await fetch(backendURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+
+    let result = await res.json();
+    status.textContent = result.message;
+
+    if (result.success) {
+        tg.close();
+    }
+}
