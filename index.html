@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini App</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Mini App Form</title>
 </head>
 <body>
+  <h2>Register</h2>
 
-<div class="container">
-    <h2>Ro‘yxatdan o‘tish</h2>
+  <input id="name" placeholder="Your name"><br><br>
+  <input id="phone" placeholder="Phone number"><br><br>
 
-    <input id="name" type="text" placeholder="Ismingiz">
-    <input id="phone" type="text" placeholder="Telefon">
+  <button id="sendBtn">Send</button>
 
-    <button onclick="sendData()" class="btn">Yuborish</button>
+  <p id="result"></p>
 
-    <p id="status"></p>
-</div>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-<script src="app.js"></script>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    document.getElementById("sendBtn").onclick = async function () {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const user_id = tg.initDataUnsafe.user?.id;
+
+        if (!name || !phone) {
+            alert("Iltimos barcha maydonlarni to‘ldiring!");
+            return;
+        }
+
+        const payload = { user_id, name, phone };
+        console.log("Yuborilayotgan:", payload);
+
+        const res = await fetch("https://miniapp-backend-ejgl.onrender.com/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        document.getElementById("result").innerText = JSON.stringify(data);
+        console.log("Server javobi:", data);
+    };
+  </script>
 </body>
 </html>
-
