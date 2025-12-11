@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Mini App</title>
+    <title>Mini App Auth</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="app.js"></script>
 </head>
+
 <body>
-
 <div class="container">
-    <h2>Ro‘yxatdan o‘tish</h2>
+    <h1>Welcome</h1>
 
-    <input id="name" placeholder="Ismingiz">
-    <input id="phone" placeholder="Telefon raqam">
-
-    <button id="sendBtn">Yuborish goo</button>
-
-    <p id="status"></p>
+    <button onclick="go('signup.html')">Sign Up</button>
+    <button onclick="go('login.html')">Login</button>
 </div>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="app.js"></script>
 </body>
 </html>
-
-
