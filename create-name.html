@@ -1,0 +1,51 @@
+<input id="name" placeholder="Ism">
+<p id="nameStatus"></p>
+
+<input id="password" type="password" placeholder="Parol">
+<p id="passStatus"></p>
+
+<button id="nextBtn">Keyingi</button>
+
+<script>
+const chat_id = new URLSearchParams(location.search).get("chat_id");
+
+document.getElementById("name").oninput = async () => {
+    let name = document.getElementById("name").value;
+
+    let send = await fetch("https://miniapp.onrender.com/check-name", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+    });
+
+    let res = await send.json();
+
+    document.getElementById("nameStatus").textContent =
+        res.available ? "" : "Bu ism band!";
+};
+
+document.getElementById("nextBtn").onclick = async () => {
+    let name = document.getElementById("name").value;
+    let password = document.getElementById("password").value;
+
+    if (password.length < 8) {
+        document.getElementById("passStatus").textContent =
+            "Parol kamida 8 ta belgidan iborat bo‘lsin!";
+        return;
+    }
+
+    let send = await fetch("https://miniapp.onrender.com/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, password, chat_id })
+    });
+
+    let res = await send.json();
+
+    if (res.success) {
+        window.location.href = "profile.html?name=" + name;
+    } else {
+        alert(res.msg);
+    }
+};
+</script>
