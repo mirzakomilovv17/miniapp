@@ -26,9 +26,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   if (r.success) {
     localStorage.setItem("user", JSON.stringify(r.user));
     location.href = "profile.html";
-  } else {
-    document.getElementById("error").innerText = r.error || "Xato";
-  }
+  } else document.getElementById("error").innerText = r.error || "Xato";
 });
 </script>
 </body>
