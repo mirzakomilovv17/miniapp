@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js"></script>
 </head>
 <body>
-<div class="container">
-    <h2>Sign Up</h2>
-    <input id="name" placeholder="Ismingiz"><br>
-    <input id="phone" placeholder="Telefon (+998...)"><br>
-    <input id="password" type="password" placeholder="Parol"><br>
-    <button onclick="signup()">Ro'yxatdan o'tish</button>
-    <p id="status"></p>
-</div>
+  <div class="container">
+    <h1>Profil</h1>
+    <p id="pn"></p>
+    <p id="nn"></p>
+    <button id="logout">Logout</button>
+  </div>
 
 <script>
-async function signup() {
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const backend = "https://miniapp-backend-ejgl.onrender.com/signup";
-
-    const res = await fetch(backend,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ name, phone, password })
-    });
-    const data = await res.json();
-    document.getElementById("status").innerText = data.error || data.message;
-    if (data.success) window.location.href="profile.html";
-}
+const user = JSON.parse(localStorage.getItem("user") || "null");
+if (!user) location.href = "index.html";
+document.getElementById("pn").innerText = "Telefon: " + (user.telegram_id || user.phone || " — ");
+document.getElementById("nn").innerText = "Ism: " + (user.name || " — ");
+document.getElementById("logout").addEventListener("click", () => {
+  localStorage.removeItem("user");
+  location.href = "index.html";
+});
 </script>
 </body>
 </html>
