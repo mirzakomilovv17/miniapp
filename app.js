@@ -1,6 +1,10 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+function go(page) {
+    window.location.href = page;
+}
+
 const forms = document.getElementById("forms");
 const status = document.getElementById("status");
 
@@ -73,3 +77,4 @@ async function sendLogin() {
         tg.close();
     }
 }
+
