@@ -1,28 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Profil</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 <div class="container">
-    <h1>👤 Profil</h1>
-
-    <h2 id="username"></h2>
-
-    <button onclick="logout()">Chiqish</button>
+    <h2>Profil</h2>
+    <p>Saytga xush kelibsiz!</p>
+    <button onclick="location.href='index.html'">Chiqish</button>
 </div>
-
-<script>
-document.getElementById("username").innerText =
-    localStorage.getItem("user_name") || "Foydalanuvchi";
-
-function logout() {
-    localStorage.clear();
-    window.location.href = "index.html";
-}
-</script>
-
 </body>
 </html>
