@@ -17,8 +17,8 @@
 <script>
 const user = JSON.parse(localStorage.getItem("user") || "null");
 if (!user) location.href = "index.html";
-document.getElementById("pn").innerText = "Telefon: " + (user.telegram_id || user.phone || " — ");
-document.getElementById("nn").innerText = "Ism: " + (user.name || " — ");
+document.getElementById("pn").innerText = "Telegram ID: " + (user.telegram_id || "—");
+document.getElementById("nn").innerText = "Ism: " + (user.name || "—");
 document.getElementById("logout").addEventListener("click", () => {
   localStorage.removeItem("user");
   location.href = "index.html";
@@ -26,6 +26,3 @@ document.getElementById("logout").addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-
-
