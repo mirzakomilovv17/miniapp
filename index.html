@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="uz">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini App Auth</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="app.js"></script>
 </head>
-
 <body>
-<div class="container">
-    <h1>Welcome</h1>
 
-    <button onclick="go('signup.html')">Sign Up</button>
-    <button onclick="go('login.html')">Login</button>
+<div class="container">
+    <h2>Mini App</h2>
+
+    <button id="signupBtn" class="btn">Sign Up</button>
+    <button id="loginBtn" class="btn">Login</button>
+
+    <div id="forms"></div>
+
+    <p id="status"></p>
 </div>
+
+<script src="app.js"></script>
 </body>
 </html>
