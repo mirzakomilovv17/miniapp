@@ -1,103 +1,14 @@
-const tg = window.Telegram.WebApp;
-tg.expand();
+// frontend/app.js
+const BACKEND = "https://miniapp-backend-ejgl.onrender.com"; // <-- render URLni to'g'rilab qo'ying
+const tg = window.Telegram?.WebApp;
+if (tg) tg.expand();
 
-function go(page) {
-    window.location.href = page;
-}
-
-const forms = document.getElementById("forms");
-const status = document.getElementById("status");
-
-// SIGNUP BOSILGANDA
-document.getElementById("signupBtn").addEventListener("click", () => {
-    forms.innerHTML = `
-        <h3>Ro'yxatdan o'tish</h3>
-        <input id="name" placeholder="Ism"><br>
-        <input id="phone" placeholder="Telefon"><br>
-        <input id="password" type="password" placeholder="Parol"><br>
-        <button id="sendSignup" class="btn">Yuborish</button>
-    `;
-
-    document.getElementById("sendSignup").onclick = sendSignup;
-});
-
-// LOGIN BOSILGANDA
-document.getElementById("loginBtn").addEventListener("click", () => {
-    forms.innerHTML = `
-        <h3>Kirish</h3>
-        <input id="phoneLogin" placeholder="Telefon"><br>
-        <input id="passwordLogin" type="password" placeholder="Parol"><br>
-        <button id="sendLogin" class="btn">Kirish</button>
-    `;
-
-    document.getElementById("sendLogin").onclick = sendLogin;
-});
-
-// -------- SIGNUP FUNKSIYA --------
-async function sendSignup() {
-    const backendURL = "https://miniapp-backend-ejgl.onrender.com/signup";
-
-    const data = {
-        name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
-        password: document.getElementById("password").value.trim(),
-        user_id: tg.initDataUnsafe?.user?.id
-    };
-
-    let res = await fetch(backendURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    let result = await res.json();
-
-    if (result.error) {
-        status.textContent = result.error;
-        status.style.color = "red";
-        return;
-    }
-
-    status.textContent = "Muvaffaqiyatli ro'yxatdan o'tdingiz!";
-    status.style.color = "green";
-
-    // foydalanuvchini saqlaymiz
-    localStorage.setItem("user", JSON.stringify(result.user));
-
-    setTimeout(() => {
-        window.location.href = "profile.html";
-    }, 600);
-}
-
-// -------- LOGIN FUNKSIYA --------
-async function sendLogin() {
-    const backendURL = "https://miniapp-backend-ejgl.onrender.com/login";
-
-    const data = {
-        phone: document.getElementById("phoneLogin").value.trim(),
-        password: document.getElementById("passwordLogin").value.trim()
-    };
-
-    let res = await fetch(backendURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    let result = await res.json();
-
-    if (result.error) {
-        status.textContent = result.error;
-        status.style.color = "red";
-        return;
-    }
-
-    status.textContent = "Kirish muvaffaqiyatli!";
-    status.style.color = "green";
-
-    localStorage.setItem("user", JSON.stringify(result.user));
-
-    setTimeout(() => {
-        window.location.href = "profile.html";
-    }, 600);
+// helper for POST
+async function post(path, body) {
+  const res = await fetch(BACKEND + path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  return res.json();
 }
