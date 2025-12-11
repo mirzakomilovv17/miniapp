@@ -19,7 +19,7 @@ async function login() {
     const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value.trim();
 
-    const res = await fetch("https://YOUR_RENDER_URL/login", {
+    const res = await fetch("https://miniapp-backend-ejgl.onrender.com/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone, password })
@@ -39,3 +39,4 @@ async function login() {
 </script>
 </body>
 </html>
+
