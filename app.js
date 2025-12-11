@@ -1,9 +1,8 @@
 // frontend/app.js
-const BACKEND = "https://miniapp-backend-ejgl.onrender.com"; // <-- render URLni to'g'rilab qo'ying
+const BACKEND = "https://miniapp-backend-ejgl.onrender.com"; // <-- shu URLni o'zgartiring agar boshqacha bo'lsa
 const tg = window.Telegram?.WebApp;
 if (tg) tg.expand();
 
-// helper for POST
 async function post(path, body) {
   const res = await fetch(BACKEND + path, {
     method: "POST",
