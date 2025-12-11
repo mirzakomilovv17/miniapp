@@ -33,7 +33,6 @@ document.getElementById("loginBtn").addEventListener("click", () => {
     document.getElementById("sendLogin").onclick = sendLogin;
 });
 
-
 // -------- SIGNUP FUNKSIYA --------
 async function sendSignup() {
     const backendURL = "https://miniapp-backend-ejgl.onrender.com/signup";
@@ -52,7 +51,22 @@ async function sendSignup() {
     });
 
     let result = await res.json();
-    status.textContent = result.message;
+
+    if (result.error) {
+        status.textContent = result.error;
+        status.style.color = "red";
+        return;
+    }
+
+    status.textContent = "Muvaffaqiyatli ro'yxatdan o'tdingiz!";
+    status.style.color = "green";
+
+    // foydalanuvchini saqlaymiz
+    localStorage.setItem("user", JSON.stringify(result.user));
+
+    setTimeout(() => {
+        window.location.href = "profile.html";
+    }, 600);
 }
 
 // -------- LOGIN FUNKSIYA --------
@@ -71,11 +85,19 @@ async function sendLogin() {
     });
 
     let result = await res.json();
-    status.textContent = result.message;
 
-    if (result.success) {
-        tg.close();
+    if (result.error) {
+        status.textContent = result.error;
+        status.style.color = "red";
+        return;
     }
+
+    status.textContent = "Kirish muvaffaqiyatli!";
+    status.style.color = "green";
+
+    localStorage.setItem("user", JSON.stringify(result.user));
+
+    setTimeout(() => {
+        window.location.href = "profile.html";
+    }, 600);
 }
-
-
