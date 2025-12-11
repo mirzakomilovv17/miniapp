@@ -1,6 +1,7 @@
 const tg = window.Telegram.WebApp;
-tg.ready();
 tg.expand();
+
+document.getElementById("sendBtn").addEventListener("click", sendData);
 
 async function sendData() {
     const name = document.getElementById("name").value.trim();
@@ -8,39 +9,43 @@ async function sendData() {
     const status = document.getElementById("status");
 
     if (!name || !phone) {
+        status.style.color = "red";
         status.textContent = "Ma'lumot to‘liq emas!";
         return;
     }
 
-    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
-        status.textContent = "Mini App Telegram ichida ochilishi kerak!";
-        return;
-    }
+    const backendURL = "https://miniapp-backend-ejgl.onrender.com/save";
 
-    const backendURL = "https://miniapp-backend-ejgl.onrender.com";
-
-    const body = {
-        user_id: tg.initDataUnsafe.user.id,
+    const payload = {
+        user_id: tg.initDataUnsafe?.user?.id,
         name,
         phone
     };
+
+    console.log("Yuborilayotgan ma'lumot:", payload);
 
     try {
         const response = await fetch(backendURL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
+            body: JSON.stringify(payload)
         });
 
-        const result = await response.json();
-        console.log(result);
+        const data = await response.json();
+        console.log("Backenddan javob:", data);
 
-        status.textContent = "Muvaffaqiyatli yuborildi!";
-        tg.close();
+        if (response.ok) {
+            status.style.color = "green";
+            status.textContent = "Muvaffaqiyatli yuborildi!";
+            tg.close(); // mini appni yopadi
+        } else {
+            status.style.color = "red";
+            status.textContent = "Xatolik yuz berdi!";
+        }
 
     } catch (error) {
-        console.error(error);
-        status.textContent = "Xatolik!";
+        console.error("Fetch error:", error);
+        status.style.color = "red";
+        status.textContent = "Serverga ulanishda xato!";
     }
 }
-
