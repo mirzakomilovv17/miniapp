@@ -35,14 +35,10 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
 
   const r = await post("/set-profile", { user_id: String(userId), name, password });
   if (r.success) {
-    // save to localStorage for demo session
     localStorage.setItem("user", JSON.stringify(r.user));
     location.href = "profile.html";
-  } else {
-    document.getElementById("error").innerText = r.error || "Xato";
-  }
+  } else document.getElementById("error").innerText = r.error || "Xato";
 });
 </script>
 </body>
 </html>
-
