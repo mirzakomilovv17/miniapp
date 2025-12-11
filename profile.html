@@ -1,13 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>Set Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="app.js"></script>
 </head>
 <body>
-<div class="container">
-    <h2>Profil</h2>
-    <p>Saytga xush kelibsiz!</p>
-    <button onclick="location.href='index.html'">Chiqish</button>
-</div>
+  <div class="container">
+    <h1>Ism va parol</h1>
+    <input id="name" placeholder="Ismingiz" />
+    <div style="text-align:left;width:90%;margin:auto"><button id="checkName" class="linkbtn">Ismni tekshirish</button></div>
+    <input id="password" type="password" placeholder="Parol (kamida 8 belgi)" />
+    <button id="saveBtn">Keyingi</button>
+    <p id="error"></p>
+  </div>
+
+<script>
+document.getElementById("checkName").addEventListener("click", async () => {
+  const name = document.getElementById("name").value.trim();
+  if (!name) { document.getElementById("error").innerText = "Ism kiriting"; return; }
+  const r = await post("/check-name", { name });
+  document.getElementById("error").innerText = r.ok ? "Ism band emas" : "Bu ism band";
+});
+
+document.getElementById("saveBtn").addEventListener("click", async () => {
+  const name = document.getElementById("name").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+
+  if (!name || !password) { document.getElementById("error").innerText = "To'ldiring"; return; }
+  if (password.length < 8) { document.getElementById("error").innerText = "Parol 8 belgidan kam bo'lmasin"; return; }
+
+  const r = await post("/set-profile", { user_id: String(userId), name, password });
+  if (r.success) {
+    // save to localStorage for demo session
+    localStorage.setItem("user", JSON.stringify(r.user));
+    location.href = "profile.html";
+  } else {
+    document.getElementById("error").innerText = r.error || "Xato";
+  }
+});
+</script>
 </body>
 </html>
